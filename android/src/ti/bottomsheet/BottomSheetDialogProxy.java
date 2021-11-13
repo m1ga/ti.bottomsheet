@@ -8,6 +8,8 @@ import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
 
+import java.util.HashMap;
+
 @Kroll.proxy(creatableInModule = TiBottomsheetModule.class,
 	propertyAccessors = {
 		"peakHeight"
@@ -44,7 +46,13 @@ public class BottomSheetDialogProxy extends TiViewProxy
 	}
 
 	@Kroll.method
-	public void show()
+	public void show(@Kroll.argument(optional=true) HashMap options)
+	{
+		bottomSheet.show();
+	}
+
+	@Kroll.method
+	public void open(@Kroll.argument(optional=true) HashMap options)
 	{
 		bottomSheet.show();
 	}

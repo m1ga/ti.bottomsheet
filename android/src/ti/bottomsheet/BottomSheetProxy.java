@@ -9,6 +9,7 @@ import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
 
+import java.util.HashMap;
 
 @Kroll.proxy(creatableInModule = TiBottomsheetModule.class,
 	propertyAccessors = {
@@ -54,13 +55,25 @@ public class BottomSheetProxy extends TiViewProxy
 	}
 
 	@Kroll.method
-	public void hide()
+	public void hide(@Kroll.argument(optional=true) HashMap options)
 	{
 		bottomSheet.collapse();
 	}
 
 	@Kroll.method
-	public void show()
+	public void close(@Kroll.argument(optional=true) HashMap options)
+	{
+		bottomSheet.collapse();
+	}
+
+	@Kroll.method
+	public void show(@Kroll.argument(optional=true) HashMap options)
+	{
+		bottomSheet.expand();
+	}
+
+	@Kroll.method
+	public void open(@Kroll.argument(optional=true) HashMap options)
 	{
 		bottomSheet.expand();
 	}
