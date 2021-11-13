@@ -19,8 +19,8 @@ __work in progress__ methods/properties/events might change before the first rel
 
 
 ```js
-$.bs.show();
-$.bsd.show();
+$.bs.open();
+$.bsd.open();
 ```
 
 ## BottomSheet
@@ -29,10 +29,10 @@ Can be used for a peaking view at the bottom that can be extended.
 
 ### Methods
 
-* show
-* hide
-* toggle
-* add
+* show() or open()
+* hide()
+* toggle()
+* add()
 
 ### Properties
 
@@ -59,9 +59,9 @@ The dialog version will dimm the background when it is shown.
 
 ### Methods
 
-* show
-* hide
-* add
+* show() or open()
+* hide() or close()
+* add()
 
 ### Properties
 
