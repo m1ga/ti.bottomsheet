@@ -10,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
-import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
@@ -41,6 +41,8 @@ public class TiUIBottomSheetView extends TiUIView
 			processProperties(getProxy().getProperties());
 		}
 	}
+
+
 
 	@Override
 	public void add(TiUIView child)
@@ -106,7 +108,6 @@ public class TiUIBottomSheetView extends TiUIView
 		}
 		LayoutInflater inflater = LayoutInflater.from(proxy.getActivity());
 		layout = (CoordinatorLayout) inflater.inflate(id_drawer_layout, null);
-		layout.setClickable(false);
 		setNativeView(layout);
 
 		bsLayout = (RelativeLayout) layout.findViewById(id_bottomSheet);
@@ -115,6 +116,7 @@ public class TiUIBottomSheetView extends TiUIView
 		int localPeak = TiConvert.toTiDimension(TiConvert.toString(peakHeight),
 			TiDimension.TYPE_HEIGHT).getAsPixels(getNativeView());
 		bottomSheetBehavior.setPeekHeight(localPeak);
+
 
 		if (d.containsKeyAndNotNull(TiC.PROPERTY_BACKGROUND_COLOR)) {
 			bsLayout.setBackgroundColor(TiConvert.toColor(TiConvert.toString(d.get(TiC.PROPERTY_BACKGROUND_COLOR))));
