@@ -1,17 +1,20 @@
 package ti.bottomsheet;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollProxy;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
@@ -58,7 +61,7 @@ public class TiUIBottomSheetView extends TiUIView
 		} else if (width.equals(TiC.LAYOUT_FILL)) {
 			w = RelativeLayout.LayoutParams.MATCH_PARENT;
 		} else {
-			w = (int) TiConvert.toTiDimension(TiConvert.toString(width), TiDimension.TYPE_WIDTH).getAsPixels(view);
+			w = TiConvert.toTiDimension(TiConvert.toString(width), TiDimension.TYPE_WIDTH).getAsPixels(view);
 		}
 
 		int h = RelativeLayout.LayoutParams.MATCH_PARENT;
@@ -67,7 +70,7 @@ public class TiUIBottomSheetView extends TiUIView
 		} else if (height.equals(TiC.LAYOUT_FILL)) {
 			h = RelativeLayout.LayoutParams.MATCH_PARENT;
 		} else {
-			h = (int) TiConvert.toTiDimension(TiConvert.toString(height), TiDimension.TYPE_HEIGHT).getAsPixels(view);
+			h = TiConvert.toTiDimension(TiConvert.toString(height), TiDimension.TYPE_HEIGHT).getAsPixels(view);
 		}
 
 		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(w, h);
@@ -105,10 +108,11 @@ public class TiUIBottomSheetView extends TiUIView
 		layout = (CoordinatorLayout) inflater.inflate(id_drawer_layout, null);
 		layout.setClickable(false);
 		setNativeView(layout);
+
 		bsLayout = (RelativeLayout) layout.findViewById(id_bottomSheet);
 		bottomSheetBehavior = BottomSheetBehavior.from(bsLayout);
 		bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-		int localPeak = (int) TiConvert.toTiDimension(TiConvert.toString(peakHeight),
+		int localPeak = TiConvert.toTiDimension(TiConvert.toString(peakHeight),
 			TiDimension.TYPE_HEIGHT).getAsPixels(getNativeView());
 		bottomSheetBehavior.setPeekHeight(localPeak);
 
@@ -147,6 +151,20 @@ public class TiUIBottomSheetView extends TiUIView
 		});
 	}
 
+	@Override
+	public void propertyChanged(String key, Object oldValue, Object newValue, KrollProxy proxy) {
+		super.propertyChanged(key, oldValue, newValue, proxy);
+
+		if (key.equals("peakHeight")) {
+			peakHeight = TiConvert.toInt(newValue, 32);
+			int localPeak = TiConvert.toTiDimension(TiConvert.toString(peakHeight),
+					TiDimension.TYPE_HEIGHT).getAsPixels(getNativeView());
+
+			bottomSheetBehavior.setPeekHeight(localPeak);
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+		}
+	}
+
 	public void toggle()
 	{
 		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
@@ -166,6 +184,7 @@ public class TiUIBottomSheetView extends TiUIView
 		bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	public void setNestedScrolling(boolean value)
 	{
 		bsLayout.setNestedScrollingEnabled(value);

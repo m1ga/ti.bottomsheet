@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiBlob;
 import org.appcelerator.titanium.TiC;
@@ -302,6 +303,20 @@ public class TiUIBottomSheetDialogView extends TiUIView
 			}
 		} catch (TiRHelper.ResourceNotFoundException e) {
 			//
+		}
+	}
+
+	@Override
+	public void propertyChanged(String key, Object oldValue, Object newValue, KrollProxy proxy) {
+		super.propertyChanged(key, oldValue, newValue, proxy);
+
+		if (key.equals("peakHeight")) {
+			peakHeight = TiConvert.toInt(newValue, 32);
+			int localPeak = TiConvert.toTiDimension(TiConvert.toString(peakHeight),
+					TiDimension.TYPE_HEIGHT).getAsPixels(getNativeView());
+
+			bottomSheetBehavior.setPeekHeight(localPeak);
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 		}
 	}
 
