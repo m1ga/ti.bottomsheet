@@ -1,5 +1,6 @@
 # Ti.BottomSheet & Ti.BottomSheetDialog for Android
 
+for the iOS version have a look here: [ti.bottomsheetcontroller-ios](https://github.com/mbender74/ti.bottomsheetcontroller-ios).
 
 __work in progress__ methods/properties/events might change before the first release.
 
