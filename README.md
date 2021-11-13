@@ -40,7 +40,16 @@ Can be used for a peaking view at the bottom that can be extended.
 ### Events
 * open
 * close
-* stateChanged
+* stateChanged: e.state (see Constants)
+
+### Constants
+
+* BottomSheet.STATE_DRAGGING
+* BottomSheet.STATE_SLIDING
+* BottomSheet.STATE_OPEN
+* BottomSheet.STATE_PEAK
+* BottomSheet.STATE_CLOSE
+
 
 ---
 ## BottomSheetDialog
@@ -65,7 +74,7 @@ The dialog version will dimm the background when it is shown.
 * dismissed
 * open
 * close
-* stateChanged
+* stateChanged: e.state (see Constants)
 * peak
 
 ### Constants
