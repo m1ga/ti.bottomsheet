@@ -24,7 +24,6 @@ public class BottomSheetDialogProxy extends TiViewProxy
 	public BottomSheetDialogProxy()
 	{
 		super();
-		defaultValues.put("peakHeight", peakHeight);
 	}
 
 	@Override
