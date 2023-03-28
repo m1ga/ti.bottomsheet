@@ -1,5 +1,6 @@
 package ti.bottomsheet;
 
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -225,17 +226,29 @@ public class TiUIBottomSheetDialogView extends TiUIView {
         dialog = new BottomSheetDialog(TiApplication.getAppCurrentActivity(), R.style.BottomSheetDialog);
         dialog.setContentView(layout);
         dialog.setCancelable(cancelable);
-
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                fireEvent("close", new KrollDict());
+            }
+        });
         bottomSheetBehavior = BottomSheetBehavior.from((View) layout.getParent());
 
         if (d.containsKeyAndNotNull(TiC.PROPERTY_BACKGROUND_COLOR)) {
-            layout.setBackgroundTintList(ColorStateList.valueOf(TiConvert.toColor(d.getString(TiC.PROPERTY_BACKGROUND_COLOR))));
+            layout.setBackgroundTintList(ColorStateList.valueOf(TiConvert.toColor(d.getString(TiC.PROPERTY_BACKGROUND_COLOR),
+                    TiApplication.getAppCurrentActivity())));
         }
 
         if (d.containsKeyAndNotNull(TiC.PROPERTY_BORDER_RADIUS)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
-            float radius = d.getInt(TiC.PROPERTY_BORDER_RADIUS).floatValue();
+            float radius = 0;
+            if (d.get(TiC.PROPERTY_BORDER_RADIUS) instanceof Object[]) {
+                Object[] obj = (Object[]) d.get(TiC.PROPERTY_BORDER_RADIUS);
+                radius = (float) obj[0];
+            } else {
+                radius = d.getInt(TiC.PROPERTY_BORDER_RADIUS).floatValue();
+            }
             shape.setCornerRadii(new float[]{radius, radius, radius, radius, 0, 0, 0, 0});
             layout.setBackground(shape);
         }
@@ -260,9 +273,10 @@ public class TiUIBottomSheetDialogView extends TiUIView {
                 }
 
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    fireEvent("close", new KrollDict());
+                    //fireEvent("close", new KrollDict());
                 }
             }
+
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
