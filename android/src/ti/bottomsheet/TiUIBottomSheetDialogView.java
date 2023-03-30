@@ -223,9 +223,14 @@ public class TiUIBottomSheetDialogView extends TiUIView {
             }
         }
 
+
         dialog = new BottomSheetDialog(TiApplication.getAppCurrentActivity(), R.style.BottomSheetDialog);
         dialog.setContentView(layout);
         dialog.setCancelable(cancelable);
+        if(d.containsKeyAndNotNull("dimAmount"))
+        {
+            dialog.getWindow().setDimAmount(TiConvert.toFloat(d.get("dimAmount")));
+        }
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
