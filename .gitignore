@@ -1,3 +1,5 @@
 .DS_Store
 /android/dist
 /android/build
+/android/.gradle
+/android/.idea

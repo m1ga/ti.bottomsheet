@@ -39,6 +39,7 @@ Can be used for a peaking view at the bottom that can be extended.
 ### Properties
 
 * peakHeight
+* dimAmount (dialog only, creation only)
 
 ### Events
 * open
