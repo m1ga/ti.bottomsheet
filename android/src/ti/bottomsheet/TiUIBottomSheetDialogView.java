@@ -229,9 +229,7 @@ public class TiUIBottomSheetDialogView extends TiUIView {
         dialog.setCancelable(cancelable);
         if(d.containsKeyAndNotNull("dimAmount"))
         {
-            float dimAmount = Float.parseFloat(d.getString("dimAmount"));
-            // dialog.setDimAmount(dimAmount);
-            dialog.getWindow().setDimAmount(dimAmount);   
+            dialog.getWindow().setDimAmount(TiConvert.toFloat(d.get("dimAmount")));
         }
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
