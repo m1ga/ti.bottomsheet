@@ -8,13 +8,21 @@ const bs = BottomSheet.createBottomSheetDialog({
 	dimAmount: 0.75,
 	cancelable: true
 })
-const view = Ti.UI.createView({
+const view = Ti.UI.createScrollView({
 	height: 300,
 	width: Ti.UI.FILL,
-	backgroundColor: "#ffffff"
+	backgroundColor: "#ffffff",
+	bottom: 5
+})
+
+const tf = Ti.UI.createTextField({
+	width: 200,
+	backgroundColor:"#333",
+	bottom: 4
 })
 win.add([lbl, bs]);
 bs.add(view);
+view.add(tf);
 win.addEventListener("click", function() {
 	bs.open();
 })
@@ -23,6 +31,7 @@ bs.addEventListener("close", function(e) {
 })
 bs.addEventListener("stateChanged", function(e) {
 	console.log("stateChanged");
+	tf.bottom = 10
 })
 
 win.open();

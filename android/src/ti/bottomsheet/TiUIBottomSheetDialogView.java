@@ -87,7 +87,26 @@ public class TiUIBottomSheetDialogView extends TiUIView {
             h = TiConvert.toTiDimension(TiConvert.toString(height), TiDimension.TYPE_HEIGHT).getAsPixels(view);
         }
 
+        int left = 0;
+        int top = 0;
+        int bottom = 0;
+        if (child.getProxy().hasProperty(TiC.PROPERTY_LEFT)) {
+            left = TiConvert.toInt(child.getProxy().getProperty(TiC.PROPERTY_LEFT));
+            left = TiConvert.toTiDimension(TiConvert.toString(left), TiDimension.TYPE_LEFT).getAsPixels(view);
+        }
+        if (child.getProxy().hasProperty(TiC.PROPERTY_TOP)) {
+            top = TiConvert.toInt(child.getProxy().getProperty(TiC.PROPERTY_TOP));
+            top = TiConvert.toTiDimension(TiConvert.toString(top), TiDimension.TYPE_TOP).getAsPixels(view);
+        }
+        if (child.getProxy().hasProperty(TiC.PROPERTY_BOTTOM)) {
+            bottom = TiConvert.toInt(child.getProxy().getProperty(TiC.PROPERTY_BOTTOM));
+            bottom = TiConvert.toTiDimension(TiConvert.toString(bottom), TiDimension.TYPE_BOTTOM).getAsPixels(view);
+        }
+
         RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(w, h);
+        rlp.leftMargin = left;
+        rlp.topMargin = top;
+        rlp.bottomMargin = bottom;
         bsLayout.addView(view, rlp);
     }
 
