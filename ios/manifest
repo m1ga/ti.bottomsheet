@@ -1,0 +1,19 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.3.0
+apiversion: 2
+architectures: arm64 x86_64
+mac: false
+description: ti.bottomsheet
+author: Michael Gangolf
+license: MIT
+copyright: Copyright (c) 2021-2026 Michael Gangolf
+
+# these should not be edited
+name: ti.bottomsheet
+moduleid: ti.bottomsheet
+guid: 408496a9-b140-4ba0-a223-80d91b001fae
+platform: iphone
+minsdk: 12.0.0.GA

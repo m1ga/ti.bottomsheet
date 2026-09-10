@@ -2,60 +2,64 @@ package ti.bottomsheet;
 
 import android.app.Activity;
 
-import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.proxy.TiViewProxy;
-import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
 
 import java.util.HashMap;
 
 @Kroll.proxy(creatableInModule = TiBottomsheetModule.class,
         propertyAccessors = {
-                "peakHeight"
+                "peakHeight",
+                "cancelable",
+                "dimAmount",
+                "dragIndicator"
         })
 public class BottomSheetDialogProxy extends TiViewProxy {
-    private static final String TAG = "BottomSheetProxy";
-    private static int id_toolbar;
-    private TiUIBottomSheetDialogView bottomSheet;
-    private int peakHeight = 32;
 
     public BottomSheetDialogProxy() {
         super();
-    }
-
-    @Override
-    public void handleCreationDict(KrollDict options) {
-        super.handleCreationDict(options);
-
-        if (options.containsKeyAndNotNull("peakHeight")) {
-            peakHeight = TiConvert.toInt(options.get("peakHeight"));
-        }
-
+        defaultValues.put("dragIndicator", false);
     }
 
     @Override
     public TiUIView createView(Activity activity) {
-        bottomSheet = new TiUIBottomSheetDialogView(this);
-        return bottomSheet;
+        return new TiUIBottomSheetDialogView(this);
+    }
+
+    private TiUIBottomSheetDialogView dialog(boolean create) {
+        TiUIView view = create ? getOrCreateView() : peekView();
+        return view instanceof TiUIBottomSheetDialogView ? (TiUIBottomSheetDialogView) view : null;
     }
 
     @Kroll.method
     public void show(@Kroll.argument(optional = true) HashMap options) {
-        if (bottomSheet != null) {
-            bottomSheet.show();
-        }
+        open(options);
     }
 
     @Kroll.method
     public void open(@Kroll.argument(optional = true) HashMap options) {
-        if (bottomSheet != null) {
-            bottomSheet.show();
+        TiUIBottomSheetDialogView dialog = dialog(true);
+        if (dialog != null) {
+            dialog.show();
+        }
+    }
+
+    @Kroll.method
+    public void hide(@Kroll.argument(optional = true) HashMap options) {
+        close(options);
+    }
+
+    @Kroll.method
+    public void close(@Kroll.argument(optional = true) HashMap options) {
+        TiUIBottomSheetDialogView dialog = dialog(false);
+        if (dialog != null) {
+            dialog.hide();
         }
     }
 
     @Override
     public String getApiName() {
-        return "Ti.UI.BottomSheet";
+        return "ti.bottomsheet.BottomSheetDialog";
     }
 }

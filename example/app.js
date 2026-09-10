@@ -20,7 +20,7 @@ const tf = Ti.UI.createTextField({
 	backgroundColor:"#333",
 	bottom: 4
 })
-win.add([lbl, bs]);
+win.add(lbl);
 bs.add(view);
 view.add(tf);
 win.addEventListener("click", function() {
