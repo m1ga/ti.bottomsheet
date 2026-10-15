@@ -387,6 +387,14 @@ public class TiUIBottomSheetDialogView extends TiUIView {
                 if (!suppressEvents) {
                     fireEvent("close", new KrollDict());
                 }
+                // A dismissed dialog still holds its window and decor view. Drop it so that a proxy
+                // which JavaScript keeps does not retain them. show() creates a new dialog on demand.
+                // Compare first: this can run late for a dialog that ensureDialog() already replaced.
+                if (dialogInterface == dialog) {
+                    dialog.getBehavior().removeBottomSheetCallback(callback);
+                    dialog = null;
+                    dialogActivity = null;
+                }
             }
         });
 
