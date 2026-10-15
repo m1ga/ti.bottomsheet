@@ -151,12 +151,6 @@ const CGFloat TiBottomsheetGrabberInset = 20.0;
 
 #pragma mark - Detents
 
-- (CGFloat)bottomSafeInset
-{
-  UIView *rootView = [[[TiApp app] controller] view];
-  return rootView != nil ? rootView.safeAreaInsets.bottom : 0;
-}
-
 - (CGFloat)contentWidth
 {
   CGFloat width = self.isViewLoaded ? self.view.bounds.size.width : 0;
@@ -165,15 +159,17 @@ const CGFloat TiBottomsheetGrabberInset = 20.0;
 
 /**
  * Height the sheet needs to show the header rows and the proxy's children
- * without scrolling: top inset + header + measured content + bottom safe area.
+ * without scrolling: top inset + header + measured content. Custom detent
+ * values exclude the bottom safe area; UIKit adds it to the sheet's frame
+ * itself, and viewDidLayoutSubviews keeps the content area above it.
  * Children that fill their parent measure as the full available height, so
  * the result is capped at the maximum detent value.
  */
-- (CGFloat)contentDetentHeightForMaximum:(CGFloat)maximum bottomInset:(CGFloat)bottomInset
+- (CGFloat)contentDetentHeightForMaximum:(CGFloat)maximum
 {
   CGFloat width = [self contentWidth];
   CGFloat top = self.topInset + [self headerHeightForWidth:width];
-  CGFloat available = MAX(0, maximum - top - bottomInset);
+  CGFloat available = MAX(0, maximum - top);
 
   CGFloat content = 0;
   TiViewProxy *proxy = self.layoutProxy;
@@ -181,7 +177,7 @@ const CGFloat TiBottomsheetGrabberInset = 20.0;
     content = ceil([proxy autoHeightForSize:CGSizeMake(width, available)]);
   }
 
-  return MIN(maximum, MAX(1, top + content + bottomInset));
+  return MIN(maximum, MAX(1, top + content));
 }
 
 - (NSArray<UISheetPresentationControllerDetent *> *)detentsWithPeakHeight:(id)peakHeight sizeToContent:(BOOL)sizeToContent
@@ -205,14 +201,13 @@ const CGFloat TiBottomsheetGrabberInset = 20.0;
     if (@available(iOS 16.0, *)) {
       self.usesContentDetent = YES;
       __weak TiBottomsheetSheetController *weakSelf = self;
-      CGFloat bottomInset = [self bottomSafeInset];
       [detents addObject:[UISheetPresentationControllerDetent customDetentWithIdentifier:TiBottomsheetContentDetentIdentifier
                                                                                  resolver:^CGFloat(id<UISheetPresentationControllerDetentResolutionContext> context) {
                                                                                    TiBottomsheetSheetController *strongSelf = weakSelf;
                                                                                    if (strongSelf == nil) {
                                                                                      return 1;
                                                                                    }
-                                                                                   CGFloat height = [strongSelf contentDetentHeightForMaximum:context.maximumDetentValue bottomInset:bottomInset];
+                                                                                   CGFloat height = [strongSelf contentDetentHeightForMaximum:context.maximumDetentValue];
                                                                                    strongSelf.lastContentDetentMaximum = context.maximumDetentValue;
                                                                                    strongSelf.lastContentDetentHeight = height;
                                                                                    return height;
@@ -255,8 +250,7 @@ const CGFloat TiBottomsheetGrabberInset = 20.0;
     }
     if (@available(iOS 16.0, *)) {
       if (strongSelf.lastContentDetentMaximum > 0) {
-        CGFloat height = [strongSelf contentDetentHeightForMaximum:strongSelf.lastContentDetentMaximum
-                                                       bottomInset:[strongSelf bottomSafeInset]];
+        CGFloat height = [strongSelf contentDetentHeightForMaximum:strongSelf.lastContentDetentMaximum];
         if (fabs(height - strongSelf.lastContentDetentHeight) < 0.5) {
           return;
         }
